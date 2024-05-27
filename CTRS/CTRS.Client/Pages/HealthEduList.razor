@@ -1,0 +1,152 @@
+﻿@page "/healthEdu-list"
+
+@rendermode InteractiveAuto
+
+<style>
+    .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+        .table-scroll th,
+        .table-scroll td {
+            white-space: normal; /* 允許文字折行 */
+            overflow: hidden; /* 超出部分隱藏 */
+            text-overflow: ellipsis; /* 顯示省略號 */
+        }
+
+        .table-scroll img {
+            max-width: 100px; /* 圖片最大寬度 */
+        }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card">
+                    <div class="card-header">
+                        <button class="btn btn-primary float-end" @onclick="NavigateToAddHealthEduPage">新增衛教資訊</button>
+                    </div>
+                </div>
+                @if (HealthEdus.Count > 0)
+                {
+                    <div class="card-body">
+                        <div class="table-scroll">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">Id</th>
+                                        <th style="width: 10%">類別</th>
+                                        <th style="width: 20%">主題</th>
+                                        <th style="width: 30%">連結</th>
+                                        <th style="width: 20%">修改/刪除</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var healthEdu in HealthEdus)
+                                    {
+                                        <tr>
+                                            <td>@healthEdu.Id</td>
+                                            <td>@healthEdu.Class</td>
+                                            <td>@healthEdu.Title</td>
+                                            <td>
+                                                @{
+                                                    if (Uri.IsWellFormedUriString(healthEdu.Link, UriKind.Absolute))
+                                                    {
+                                                        var uri = new Uri(healthEdu.Link);
+                                                        if (uri.Host.Contains("youtube.com"))
+                                                        {
+                                                            string videoId = GetYouTubeId(healthEdu.Link);
+                                                            if (videoId != null)
+                                                            {
+                                                                string thumbnailUrl = $"https://img.youtube.com/vi/{videoId}/0.jpg";
+                                                                <a href="@healthEdu.Link" target="_blank">
+                                                                    <img src="@thumbnailUrl" alt="Video Thumbnail">
+                                                                </a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>No Thumbnail</span>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@healthEdu.Link" target="_blank">@healthEdu.Link</a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Invalid Link</span>
+                                                    }
+                                                }
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-info" @onclick="()=>Edit(healthEdu)">修改</button>
+                                                <button class="btn btn-danger" @onclick="() => Delete(healthEdu.Id)">刪除</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info"> No HealthEdu Available </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<HealthEdu> HealthEdus { get; set; } = new();
+
+    private async Task LoadHealthEdus()
+    {
+        var healthEdus = await HealthEduService.GetAllHealthEdusAsync();
+        HealthEdus?.Clear();
+        if (HealthEdus is null) return;
+        foreach (var healthEdu in healthEdus)
+            HealthEdus.Add(healthEdu);
+    }
+
+
+    protected override async Task OnInitializedAsync() => await LoadHealthEdus();
+
+    private void NavigateToAddHealthEduPage() => NavigationManager.NavigateTo("manage-healthEdu");
+
+    private void Edit(HealthEdu model)
+    {
+        NavigationManager.NavigateTo($"manage-healthEdu/{model.Id}");
+    }
+
+    private async Task Delete(int id)
+    {
+        var healthEdu = await HealthEduService.DeleteHealthEduAsync(id);
+        await LoadHealthEdus();
+    }
+
+
+    private string GetYouTubeId(string youtubeUrl)
+    {
+        if (Uri.IsWellFormedUriString(youtubeUrl, UriKind.Absolute))
+        {
+            var uri = new Uri(youtubeUrl);
+            var queryParams = uri.Query.TrimStart('?').Split('&');
+            foreach (var param in queryParams)
+            {
+                var pair = param.Split('=');
+                if (pair.Length == 2 && pair[0] == "v")
+                {
+                    return pair[1];
+                }
+            }
+        }
+        return null;
+    }
+
+}

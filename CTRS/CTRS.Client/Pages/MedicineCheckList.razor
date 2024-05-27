@@ -1,0 +1,99 @@
+﻿@page "/MedicineCheckList"
+@rendermode InteractiveAuto
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card" style="width: 70rem;">
+                <div class="card">
+                    <div class="card-header"> <button class="btn btn-primary float-end" @onclick="NavigateToAddMedicinePage"> Add Medicine </button></div>
+                </div>
+                @if (MedicineChecks.Count > 0)
+                {
+                    <div class="card-header">
+                        Medicine List
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>病歷號</th>
+                                    <th>藥物名稱</th>
+                                    <th>服法</th>
+                                    <th>服用劑量</th>
+                                    <th>服用劑量單位</th>
+                                    <th>已服用or未服用</th>
+                                    <th>症狀情況</th>
+                                    <th>操作人員</th>
+                                    <th>操作時間</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var medicinecheck in MedicineChecks)
+                                {
+                                    <tr>
+                                        <td>@medicinecheck.Id</td>
+                                        <td>@medicinecheck.MedicineName</td>
+                                        <td>@medicinecheck.Instruction</td>
+                                        <td>@medicinecheck.EachDosage</td>
+                                        <td>@medicinecheck.UnitOfEachDosage</td>
+                                        <td>@medicinecheck.DidOrDidntTakeMedicine</td>
+                                        <td>@medicinecheck.SymptomDescription</td>
+                                        <td>@medicinecheck.Operator</td>
+                                        <td>@medicinecheck.OperationTime</td>
+                                        <td>
+                                            <div class="hstack gap-2">
+                                                <button class="btn  btn-info" @onclick="()=>Edit(medicinecheck)"> Edit</button>
+                                                <button class="btn  btn-danger" @onclick="() => Delete(medicinecheck.Id)"> Delete</button>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info"> No medicine Available </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<MedicineCheck> MedicineChecks { get; set; } = new();
+
+    private async Task LoadMedicine()
+    {
+        var medicinechecks = await MedicineCheckService.GetAllMedicineCheckAsync();
+        MedicineChecks?.Clear();
+        if (MedicineChecks is null) return;
+        foreach (var medicinecheck in medicinechecks)
+            MedicineChecks.Add(medicinecheck);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMedicine();
+    }
+
+    private void NavigateToAddMedicinePage()
+    {
+        NavigationManager.NavigateTo("manage-medicine-check-list");
+    }
+
+    private void Edit(MedicineCheck model)
+    {
+        NavigationManager.NavigateTo($"manage-medicine-check-list/{model.Id}");
+    }
+
+    private async Task Delete(int no)
+    {
+        var medicinecheck = await MedicineCheckService.DeleteMedicineCheckAsync(no);
+        await LoadMedicine();
+    }
+}

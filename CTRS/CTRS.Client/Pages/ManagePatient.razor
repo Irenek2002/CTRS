@@ -1,0 +1,286 @@
+﻿@page "/manage-patient"
+@page "/manage-patient/{Id:int}"
+@rendermode InteractiveAuto
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Add Patient</div>
+                <div class="card-body">
+                    <EditForm Model="PatientModel" OnValidSubmit="HandleSave">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <label class="form-label">病歷號</label>
+                            <InputNumber @bind-Value="PatientModel.Number" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>PatientModel.Number"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">姓名</label>
+                            <InputText @bind-Value="PatientModel.Name" class="form-control"></InputText>
+                            <ValidationMessage For="()=>PatientModel.Name"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">性別</label>
+                            <select @bind="PatientModel.Gender" class="form-control">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <ValidationMessage For="()=>PatientModel.Gender"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">病名</label>
+                            <select @bind="PatientModel.Diagnosis" class="form-control">
+                                <option value="乳癌">乳癌</option>
+                                <option value="肺癌">肺癌</option>
+                                <option value="結腸直腸癌">結腸直腸癌</option>
+                                <option value="淋巴癌">淋巴癌</option>
+                                <option value="其他癌">其他癌</option>
+                            </select>
+                            @if (PatientModel.Diagnosis == "其他癌")
+                            {
+                                <InputText @bind-Value="OtherDiagnosis" class="form-control" placeholder="請輸入病名" />
+                            }
+                            <ValidationMessage For="@(() => PatientModel.Diagnosis)" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">規則服藥內容</label>
+                            <select @bind="PatientModel.MedicationInstructions" class="form-control">
+                                @if (PatientModel.Diagnosis == "乳癌")
+                                {
+                                    <option value="Gemcitabine+Carboplatin(1000/2)"> Gemcitabine+Carboplatin(1000/2)</option>
+                                    <option value="OPD SC_Gemcitabine+Paclitaxel +PH(800/80/1/600)">OPD SC_Gemcitabine+Paclitaxel +PH(800/80/1/600)</option>
+                                    <option value="OPD SC_Gemcitabine+Paclitaxel+PH( 800/80/2/600)">OPD SC_Gemcitabine+Paclitaxel+PH( 800/80/2/600)</option>
+                                    <option value="OPD_ Carboplatin(1.5) + Paclitaxel (80)+PEM(200)">OPD_ Carboplatin(1.5) + Paclitaxel (80)+PEM(200) </option>
+                                    <option value="OPDPerjeta+Herceptin SC(2vial/600mg)">OPDPerjeta+Herceptin SC(2vial/600mg)</option>
+                                    <option value="OPD_Herceptin (8)+Paclitaxel (80)">OPD_Herceptin (8)+Paclitaxel (80)</option>
+                                }
+                                else if (PatientModel.Diagnosis == "肺癌")
+                                {
+                                    <option value="2019Gemcitabine(1000)+Carboplatin(AUC5)">2019Gemcitabine(1000)+Carboplatin(AUC5)</option>
+                                    <option value="2019Pem(500)+Cisplatin(75)+Avastin(7.5)">2019Pem(500)+Cisplatin(75)+Avastin(7.5)</option>
+                                    <option value="2019Avastin(7.5)">2019Avastin(7.5)</option>
+                                    <option value="2019Gemcitabine(1250)">2019Gemcitabine(1250)</option>
+                                    <option value="2019ICI-Pembrolizumab(200mg,Q3W)">2019ICI-Pembrolizumab(200mg,Q3W)</option>
+                                    <option value="2019ICI-Pembrolizumab(2mg/kg,Q3W)">2019ICI-Pembrolizumab(2mg/kg,Q3W)</option>
+                                }
+                                else if (PatientModel.Diagnosis == "結腸直腸癌")
+                                {
+                                    <option value="5FU/LV (2400, 44hrs) + MVASI">5FU/LV (2400, 44hrs) + MVASI</option>
+                                    <option value="5FU/LV (2400, 6hrs)">5FU/LV (2400, 6hrs)</option>
+                                    <option value="5FU/LV (2600, 44hrs)">5FU/LV (2600, 44hrs)</option>
+                                    <option value="5FU/LV (2000, 22hrs)">5FU/LV (2000, 22hrs)</option>
+                                    <option value="5FU/LV (2400, 44hrs)">5FU/LV (2400, 44hrs)</option>
+                                    <option value="5FU/LV (2400, 44hrs) + Avastin">5FU/LV (2400, 44hrs) + Avastin </option>
+                                }
+                                else if (PatientModel.Diagnosis == "淋巴癌")
+                                {
+                                    <option value="Bendamustin(120/m2單次)">Bendamustin(120/m2單次)</option>
+                                    <option value="Bendamustine120(QDx2)">Bendamustine120(QDx2)</option>
+                                    <option value="Bendamustine90(QDx2)">Bendamustine90(QDx2)</option>
+                                    <option value="Bendamustine90(QDx2)(OPD)">Bendamustine90(QDx2)(OPD)</option>
+                                    <option value="Brentuximab-Vedotin">Brentuximab-Vedotin</option>
+                                    <option value="Brentuximab-Vedotin (1.2)">Brentuximab-Vedotin (1.2)</option>
+                                }
+                                else
+                                {
+                                    <InputText @bind-Value="PatientModel.MedicationInstructions" class="form-control"></InputText>
+                                }
+                            </select>
+                            <ValidationMessage For="()=>PatientModel.MedicationInstructions"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">預計療程時間/hour:min</label>
+                            <select @bind="PatientModel.ExpectedTreatmentTime" class="form-control">
+                                @if (PatientModel.MedicationInstructions == "Gemcitabine+Carboplatin(1000/2)")
+                                {
+                                    <option value="1:30"> 1:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "OPD SC_Gemcitabine+Paclitaxel +PH(800/80/1/600)")
+                                {
+                                    <option value="5:15">5:15</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "OPD SC_Gemcitabine+Paclitaxel+PH( 800/80/2/600)")
+                                {
+                                    <option value="5:15">5:15</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "OPD_ Carboplatin(1.5) + Paclitaxel (80)+PEM(200)")
+                                {
+                                    <option value="4:30">4:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "OPDPerjeta+Herceptin SC(2vial/600mg)")
+                                {
+                                    <option value="3:0">3:0</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "OPD_Herceptin (8)+Paclitaxel (80)")
+                                {
+                                    <option value="3:0">3:0</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "2019Gemcitabine(1000)+Carboplatin(AUC5)")
+                                {
+                                    <option value="3:15">3:15</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "2019Pem(500)+Cisplatin(75)+Avastin(7.5)")
+                                {
+                                    <option value="10:30">10:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "2019Avastin(7.5)")
+                                {
+                                    <option value="1:30">1:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "2019Gemcitabine(1250)")
+                                {
+                                    <option value="0:45">0:45</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "2019ICI-Pembrolizumab(200mg,Q3W)")
+                                {
+                                    <option value="0:30">0:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "2019ICI-Pembrolizumab(2mg/kg,Q3W)")
+                                {
+                                    <option value="0:30">0:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "5FU/LV (2400, 44hrs) + MVASI")
+                                {
+                                    <option value="44:30">44:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "5FU/LV (2400, 6hrs)")
+                                {
+                                    <option value="6:0">6:0</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "5FU/LV (2600, 44hrs)")
+                                {
+                                    <option value="44:30">44:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "5FU/LV (2000, 22hrs)")
+                                {
+                                    <option value="22:30">22:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "5FU/LV (2400, 44hrs)")
+                                {
+                                    <option value="44:30">44:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "5FU/LV (2400, 44hrs) + Avastin")
+                                {
+                                    <option value="44:30">44:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "Bendamustin(120/m2單次)")
+                                {
+                                    <option value="3:0">3:0</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "Bendamustine120(QDx2)")
+                                {
+                                    <option value="26:0">26:0</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "Bendamustine90(QDx2)")
+                                {
+                                    <option value="26:0">26:0</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "Bendamustine90(QDx2)(OPD)")
+                                {
+                                    <option value="3:0">3:0</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "Brentuximab-Vedotin")
+                                {
+                                    <option value="1:30">1:30</option>
+                                }
+                                else if (PatientModel.MedicationInstructions == "Brentuximab-Vedotin (1.2)")
+                                {
+                                    <option value="1:30">1:30</option>
+                                }
+                                else
+                                {
+                                    <InputText @bind-Value="PatientModel.ExpectedTreatmentTime" class="form-control"></InputText>
+                                }
+                            </select>
+                            <ValidationMessage For="()=>PatientModel.ExpectedTreatmentTime"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">醫師</label>
+                            <InputText @bind-Value="PatientModel.Physician" class="form-control"></InputText>
+                            <ValidationMessage For="()=>PatientModel.Physician"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">最近體重</label>
+                            <InputNumber @bind-Value="PatientModel.RecentWeight" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>PatientModel.RecentWeight"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">病史</label>
+                            <select @bind="PatientModel.MedicalHistory" class="form-control">
+                                <option value="高血壓">高血壓</option>
+                                <option value="心臟病">心臟病</option>
+                                <option value="糖尿病">糖尿病</option>
+                                <option value="其他">其他</option>
+                            </select>
+                            <ValidationMessage For="()=>PatientModel.MedicalHistory"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">操作人員</label>
+                            <InputText @bind-Value="PatientModel.Operator" class="form-control"></InputText>
+                            <ValidationMessage For="()=>PatientModel.Operator"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">操作時間</label>
+                            <InputDate @bind-Value="PatientModel.OperationTime" class="form-control"></InputDate>
+                            <ValidationMessage For="()=>PatientModel.OperationTime"></ValidationMessage>
+                        </div>
+                        <button type="submit" class="btn btn-primary"> Save</button>
+                    </EditForm>
+                </div>
+
+                <div class="card-footer">
+                    PatientId: @ReturnPatient.Id <br />
+                    Number: @ReturnPatient.Number <br />
+                    Name:@ReturnPatient.Name <br />
+                    Gender: @ReturnPatient.Gender<br />
+                    ExpectedTreatmentTime: @ReturnPatient.ExpectedTreatmentTime<br />
+                    Diagnosis: @ReturnPatient.Diagnosis <br />
+                    Physician:@ReturnPatient.Physician <br />
+                    RecentWeight: @ReturnPatient.RecentWeight<br />
+                    MedicalHistory: @ReturnPatient.MedicalHistory
+                    MedicationInstructions: @ReturnPatient.MedicationInstructions <br />
+                    Operator:@ReturnPatient.Operator <br />
+                    OperationTime: @ReturnPatient.OperationTime<br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public Patient PatientModel { get; set; } = new();
+
+    public string OtherDiagnosis { get; set; } = string.Empty;
+    [Parameter] public int Id { get; set; }
+
+    private Patient ReturnPatient = new();
+    private async Task HandleSave()
+    {
+
+        if (PatientModel.Id > 0)
+        {
+            ReturnPatient = await PatientService.UpdatePatientAsync(PatientModel);
+            PatientModel = new();
+        }
+
+        else
+        {
+            ReturnPatient = await PatientService.AddPatientAsync(PatientModel);
+            PatientModel = new();
+
+        }
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id > 0)
+        {
+            PatientModel = await PatientService.GetPatientByIdAsync(Id);
+
+        }
+    }
+
+}

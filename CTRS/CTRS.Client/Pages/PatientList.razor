@@ -1,0 +1,123 @@
+﻿@page "/patient-list"
+@rendermode InteractiveAuto
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card">
+                    <div class="card-header"> <button class="btn btn-primary float-end" @onclick="NavigateToAddPatientPage"> 新增個案管理檔 </button></div>
+                </div>
+                @if (Patients.Count > 0)
+                {
+                    <div class="card-header">
+                        Patient List
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>病歷號</th>
+                                    <th>姓名</th>
+                                    <th>性別</th>
+                                    <th>病名</th>
+                                    <th>規則服藥內容</th>
+                                    <th>預計療程時間/hour:min</th>
+                                    <th>醫師</th>
+                                    <th>最近體重</th>
+                                    <th>病史</th>
+                                    <th>操作人員</th>
+                                    <th>操作時間</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var patient in Patients)
+                                {
+                                    <tr>
+                                        <td>@patient.Id</td>
+                                        <td>@patient.Number</td>
+                                        <td>@patient.Name</td>
+                                        <td>@patient.Gender</td>
+                                        <td>@patient.Diagnosis</td>
+                                        <td><button class="btn btn-link" @onclick="() => ViewPatientMedicationDetails(patient)">@patient.MedicationInstructions</button></td>
+                                        <td>@patient.ExpectedTreatmentTime</td>
+                                        <td>@patient.Physician</td>
+                                        <td>@patient.RecentWeight</td>
+                                        <td>@patient.MedicalHistory</td>
+                                        <td>@patient.Operator</td>
+                                        <td>@patient.OperationTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                        <td>
+                                            <div class="hstack gap-2">
+                                                <button class="btn  btn-info" @onclick="()=>Edit(patient)"> Edit</button>
+                                                <button class="btn  btn-danger" @onclick="() => Delete(patient.Id)"> Delete</button>
+                                                <button class="btn btn-primary" @onclick="() => AddAppointment(patient)"> 新增預約</button>
+                                                <button class="btn btn-secondary" @onclick="() => FillMedication(patient)"> 藥物填寫</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info"> 暫無個案管理檔 </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Patient> Patients { get; set; } = new();
+
+    private async Task LoadPatients()
+    {
+        var patients = await PatientService.GetAllPatientsAsync();
+        Patients?.Clear();
+        if (Patients is null) return;
+        foreach (var patient in patients)
+            Patients.Add(patient);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPatients();
+    }
+
+    private void NavigateToAddPatientPage()
+    {
+        NavigationManager.NavigateTo("manage-patient");
+    }
+
+    private void Edit(Patient model)
+    {
+        NavigationManager.NavigateTo($"manage-patient/{model.Id}");
+    }
+
+    private async Task Delete(int id)
+    {
+        var patient = await PatientService.DeletePatientAsync(id);
+        await LoadPatients();
+    }
+
+    private void ViewPatientMedicationDetails(Patient patient)
+    {
+        NavigationManager.NavigateTo($"patient-medication/{patient.Id}");
+    }
+
+    private void AddAppointment(Patient patient)
+    {
+        // Navigate to add appointment page or show add appointment modal
+        NavigationManager.NavigateTo($"/newcalendar");
+    }
+
+    private void FillMedication(Patient patient)
+    {
+        // Navigate to fill medication page or show fill medication modal
+        NavigationManager.NavigateTo($"fill-medication/{patient.Id}");
+    }
+}

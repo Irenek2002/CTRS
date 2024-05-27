@@ -1,0 +1,115 @@
+﻿@page "/manage-medicine-check-list"
+@page "/manage-medicine-check-list/{Id:int}"
+@rendermode InteractiveAuto
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Add Medicine</div>
+                <div class="card-body">
+                    <EditForm Model="MedicineCheckModel" OnValidSubmit="HandleSave">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <label class="form-label">Medicine Name</label>
+                            <InputText @bind-Value="MedicineCheckModel.MedicineName" class="form-control"></InputText>
+                            <ValidationMessage For="()=>MedicineCheckModel.MedicineName"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Instruction</label>
+                            <InputText @bind-Value="MedicineCheckModel.Instruction" class="form-control"></InputText>
+                            <ValidationMessage For="()=>MedicineCheckModel.Instruction"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Each Dosage</label>
+                            <InputNumber @bind-Value="MedicineCheckModel.EachDosage" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>MedicineCheckModel.EachDosage"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Unit of Each Dosage</label>
+                            <InputText @bind-Value="MedicineCheckModel.UnitOfEachDosage" class="form-control"></InputText>
+                            <ValidationMessage For="()=>MedicineCheckModel.UnitOfEachDosage"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Did or Didn't Take Medicine</label>
+                            <InputCheckbox @bind-Value="MedicineCheckModel.DidOrDidntTakeMedicine"></InputCheckbox>
+                            <ValidationMessage For="()=>MedicineCheckModel.DidOrDidntTakeMedicine"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Symptom Description</label>
+                            <InputText @bind-Value="MedicineCheckModel.SymptomDescription" class="form-control"></InputText>
+                            <ValidationMessage For="()=>MedicineCheckModel.SymptomDescription"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Operator</label>
+                            <InputText @bind-Value="MedicineCheckModel.Operator" class="form-control"></InputText>
+                            <ValidationMessage For="()=>MedicineCheckModel.Operator"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Operation Time</label>
+                            <InputDate @bind-Value="MedicineCheckModel.OperationTime" class="form-control"></InputDate>
+                            <ValidationMessage For="()=>MedicineCheckModel.OperationTime"></ValidationMessage>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary"> Save</button>
+                    </EditForm>
+                </div>
+
+                <div class="card-footer">
+                    <span>Id: @ReturnMedicineCheck.Id</span>
+                    <span>Name: @ReturnMedicineCheck.MedicineName</span>
+                    <span>Instruction: @ReturnMedicineCheck.Instruction</span>
+                    <span>EachDosage: @ReturnMedicineCheck.EachDosage</span>
+                    <span>UnitOfEachDosage: @ReturnMedicineCheck.UnitOfEachDosage</span>
+                    <span>DidOrDidntTakenMedicine: @ReturnMedicineCheck.DidOrDidntTakeMedicine</span>
+                    <span>SymptomDescription: @ReturnMedicineCheck.SymptomDescription</span>
+                    <span>Operator: @ReturnMedicineCheck.Operator</span>
+                    <span>OperationTime: @ReturnMedicineCheck.OperationTime</span>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    public MedicineCheck MedicineCheckModel { get; set; } = new();
+    [Parameter] public int Id { get; set; }
+    public bool DidOrDidntTakeMedicine { get; set; }
+
+    private MedicineCheck ReturnMedicineCheck = new();
+    private async Task HandleSave()
+    {
+        if (MedicineCheckModel.Id > 0)
+        {
+            ReturnMedicineCheck = await MedicineCheckService.UpdateMedicineCheckAsync(MedicineCheckModel);
+            MedicineCheckModel = new();
+        }
+
+        else
+        {
+            ReturnMedicineCheck = await MedicineCheckService.AddMedicineCheckAsync(MedicineCheckModel);
+            MedicineCheckModel = new();
+
+        }
+
+    }
+
+
+    private DateTime todayDate = DateTime.Now.Date;
+
+    protected override void OnInitialized()
+    {
+        MedicineCheckModel.OperationTime = todayDate;
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id > 0)
+            MedicineCheckModel = await MedicineCheckService.GetMedicineCheckByIdAsync(Id);
+    }
+}

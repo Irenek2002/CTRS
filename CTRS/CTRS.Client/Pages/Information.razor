@@ -1,0 +1,267 @@
+﻿@page "/information"
+@inject NavigationManager NavigationManager
+@inject IHealthEduRepository HealthEduService
+@rendermode InteractiveAuto
+
+<div class="container">
+    <h1>選擇資訊類別</h1>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.飲食指引)">飲食指引</button> &nbsp;&nbsp;
+        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.衛教資訊)">衛教資訊</button> &nbsp;&nbsp;
+        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.社會福利)">社會福利</button> &nbsp;&nbsp;
+        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.檢查報告)">檢查報告</button>
+    </div>
+</div>
+
+<br />
+
+@if (healthEduList != null && selectedCategory != HealthCategory.檢查報告)
+{
+    <div class="container">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>標題</th>
+                    <th>連結</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in healthEduList)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>
+                            @{
+                                if (item.Link.Contains("youtube.com") || item.Link.Contains("youtu.be"))
+                                {
+                                    string videoId = GetYouTubeId(item.Link);
+                                    if (videoId != null)
+                                    {
+                                        string thumbnailUrl = $"https://img.youtube.com/vi/{videoId}/0.jpg";
+                                        <a href="@item.Link" target="_blank">
+                                            <img src="@thumbnailUrl" alt="Video Thumbnail" style="max-width: 100px;">
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@item.Link" target="_blank">@item.Link</a>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (selectedCategory == HealthCategory.檢查報告)
+{
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th>患者姓名</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div>@report.PatientName</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>檢查日期</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div>@report.CheckupDate.ToString("yyyy-MM-dd")</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>白血球計數</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div style="color:@(IsWhiteBloodCellCountNormal(report.WhiteBloodCellCount) ? "black" : "red"); font-weight:@(IsWhiteBloodCellCountNormal(report.WhiteBloodCellCount) ? "normal" : "bold")">@report.WhiteBloodCellCount</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>紅血球計數</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div style="color:@(IsRedBloodCellCountNormal(report.RedBloodCellCount) ? "black" : "red"); font-weight:@(IsRedBloodCellCountNormal(report.RedBloodCellCount) ? "normal" : "bold")">@report.RedBloodCellCount</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>血小板計數</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div style="color:@(IsPlateletCountNormal(report.PlateletCount) ? "black" : "red"); font-weight:@(IsPlateletCountNormal(report.PlateletCount) ? "normal" : "bold")">@report.PlateletCount</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>血紅素檢查</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div style="color:@(IsHemoglobinNormal(report.Hemoglobin) ? "black" : "red"); font-weight:@(IsHemoglobinNormal(report.Hemoglobin) ? "normal" : "bold")">@report.Hemoglobin</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>血型</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div>@report.BloodType</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>尿比重</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div style="color:@(IsUrineSpecificGravityNormal(report.UrineSpecificGravity) ? "black" : "red"); font-weight:@(IsUrineSpecificGravityNormal(report.UrineSpecificGravity) ? "normal" : "bold")">@report.UrineSpecificGravity</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>尿蛋白</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div>@report.UrineProtein</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>尿酸鹽</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div>@report.UrineSalt</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>尿酮體</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div>@report.UrineKetone</div>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>尿白血球</th>
+                        <td>
+                            @foreach (var report in checkupReports)
+                            {
+                                <div>@report.UrineWhiteBloodCell</div>
+                            }
+                        </td>
+                    </tr>
+                    <!-- 其他檢查項目的列 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+    private List<HealthEdu> healthEduList { get; set; } = new();
+    private List<CheckupReport> checkupReports { get; set; } = new();
+    private HealthCategory selectedCategory = HealthCategory.衛教資訊; // 預設選擇衛教資訊
+
+    private async Task RedirectToCategory(HealthCategory category)
+    {
+        selectedCategory = category; // 更新選擇的類別
+        string className = category.ToString();
+        healthEduList = await HealthEduService.GetHealthEduByClassAsync(className);
+        if (category == HealthCategory.檢查報告)
+        {
+            // 提供靜態的檢查報告數據示例
+            checkupReports = GetStaticCheckupReports();
+        }
+    }
+
+    private string GetYouTubeId(string youtubeUrl)
+    {
+        var uri = new Uri(youtubeUrl);
+        var queryParams = uri.Query.TrimStart('?').Split('&');
+        foreach (var param in queryParams)
+        {
+            var pair = param.Split('=');
+            if (pair.Length == 2 && pair[0] == "v")
+            {
+                return pair[1];
+            }
+        }
+        return null;
+    }
+
+    private List<CheckupReport> GetStaticCheckupReports()
+    {
+        // 提供靜態的檢查報告數據示例
+        return new List<CheckupReport>
+        {
+            new CheckupReport
+            {
+                PatientName = "李大民",
+                CheckupDate = DateTime.Now.AddDays(-30),
+                WhiteBloodCellCount = 4300,
+                RedBloodCellCount = 3800000,
+                PlateletCount = 300000,
+                Hemoglobin = 12,
+                BloodType = "O+",
+                UrineSpecificGravity = 1.020,
+                UrineProtein = "陰性",
+                UrineSalt = "正常",
+                UrineKetone = "陰性",
+                UrineWhiteBloodCell = "0-2 /hpf"
+                // 其他檢查項目的數據
+            },
+            // 其他檢查報告
+        };
+    }
+
+    private bool IsWhiteBloodCellCountNormal(int count) => count >= 4000 && count <= 10000;
+    private bool IsRedBloodCellCountNormal(int count) => count >= 4000000 && count <= 6000000;
+    private bool IsPlateletCountNormal(int count) => count >= 150000 && count <= 450000;
+    private bool IsHemoglobinNormal(int count) => count >= 13 && count <= 17; // 男性正常範圍
+    private bool IsUrineSpecificGravityNormal(double value) => value >= 1.005 && value <= 1.030;
+
+    public class CheckupReport
+    {
+        public string PatientName { get; set; }
+        public DateTime CheckupDate { get; set; }
+        public int WhiteBloodCellCount { get; set; }
+        public int RedBloodCellCount { get; set; }
+        public int PlateletCount { get; set; }
+        public int Hemoglobin { get; set; }
+        public string BloodType { get; set; }
+        public double UrineSpecificGravity { get; set; }
+        public string UrineProtein { get; set; }
+        public string UrineSalt { get; set; }
+        public string UrineKetone { get; set; }
+        public string UrineWhiteBloodCell { get; set; }
+
+    }
+
+    public enum HealthCategory
+    {
+        衛教資訊,
+        飲食指引,
+        社會福利,
+        檢查報告
+    }
+}

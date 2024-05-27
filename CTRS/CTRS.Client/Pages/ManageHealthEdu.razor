@@ -1,0 +1,74 @@
+﻿@page "/manage-healthEdu"
+@page "/manage-healthEdu/{Id:int}"
+@rendermode InteractiveAuto
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">新增衛教資訊</div>
+                <div class="card-body">
+                    <EditForm Model="HealthEduModel" OnValidSubmit="HandleSave">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <label class="form-label">類別</label>
+                            <InputText @bind-Value="HealthEduModel.Class" class="form-control"></InputText>
+                            <ValidationMessage For="()=>HealthEduModel.Class"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">主題</label>
+                            <InputText @bind-Value="HealthEduModel.Title" class="form-control"></InputText>
+                            <ValidationMessage For="()=>HealthEduModel.Title"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">連結</label>
+                            <InputText @bind-Value="HealthEduModel.Link" class="form-control"></InputText>
+                            <ValidationMessage For="()=>HealthEduModel.Link"></ValidationMessage>
+                        </div>
+
+                        <br />
+                        <button type="submit" class="btn btn-primary">儲存</button>
+                    </EditForm>
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        Id: @ReturnHealthEdu.Id <br />
+                        類別: @ReturnHealthEdu.Class<br />
+                        主題: @ReturnHealthEdu.Title <br />
+                        連結: @ReturnHealthEdu.Link<br />
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public HealthEdu HealthEduModel { get; set; } = new HealthEdu();
+
+    [Parameter] public int Id { get; set; }
+
+    private HealthEdu ReturnHealthEdu { get; set; } = new HealthEdu();
+
+
+    private async Task HandleSave()
+    {
+        if (HealthEduModel.Id > 0)
+        {
+            ReturnHealthEdu = await HealthEduService.UpdateHealthEduAsync(HealthEduModel);
+            HealthEduModel = new HealthEdu(); // 清空表單數據
+
+        }
+        else
+        {
+            ReturnHealthEdu = await HealthEduService.AddHealthEduAsync(HealthEduModel);
+            HealthEduModel = new HealthEdu(); // 清空表單數據
+
+        }
+
+        //StateHasChanged(); // 觸發頁面重新渲染
+    }
+}

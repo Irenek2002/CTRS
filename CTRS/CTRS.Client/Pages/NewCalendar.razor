@@ -1,0 +1,165 @@
+﻿@page "/newcalendar"
+@rendermode InteractiveAuto
+@inject IReservationRepository ReservationService
+@using SharedLibrary.ReservationRepositories
+@using static SharedLibrary.Models.Reservation
+
+<h5>病床A</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            @foreach (var date in dates)
+            {
+                <th>@date.ToString("MM/dd")</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>上午</td>
+            @foreach (var date in dates)
+            {
+                <td>
+                    @{
+                        var reservation = reservations.FirstOrDefault(r => r.Day.Date == date.Date && r.SlOt == "上午" && r.BedId == "A");
+                    }
+                    <button class="btn btn-primary" @onclick='() => Edit(reservation)'>
+                        @reservation?.Id ?? "空"
+                    </button>
+                </td>
+            }
+        </tr>
+        <tr>
+            <td>下午</td>
+            @foreach (var date in dates)
+            {
+                <td>
+                    @{
+                        var reservation = reservations.FirstOrDefault(r => r.Day.Date == date.Date && r.SlOt == "下午" && r.BedId == "A");
+                    }
+                    <button class="btn btn-primary" @onclick='() => Edit(reservation)'>
+                        @reservation?.Id ?? "空"
+                    </button>
+                </td>
+            }
+        </tr>
+    </tbody>
+</table>
+
+
+<h5>病床B</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            @foreach (var date in dates)
+            {
+                <th>@date.ToString("MM/dd")</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>上午</td>
+            @foreach (var date in dates)
+            {
+                <td>
+                    @{
+                        var reservation = reservations.FirstOrDefault(r => r.Day.Date == date.Date && r.SlOt == "上午" && r.BedId == "B");
+                    }
+                    <button class="btn btn-primary" @onclick='() => Edit(reservation)'>
+                        @reservation?.Id ?? "空"
+                    </button>
+                </td>
+            }
+        </tr>
+        <tr>
+            <td>下午</td>
+            @foreach (var date in dates)
+            {
+                <td>
+                    @{
+                        var reservation = reservations.FirstOrDefault(r => r.Day.Date == date.Date && r.SlOt == "下午" && r.BedId == "B");
+                    }
+                    <button class="btn btn-primary" @onclick='() => Edit(reservation)'>
+                        @reservation?.Id ?? "空"
+                    </button>
+                </td>
+            }
+        </tr>
+    </tbody>
+</table>
+
+@code {
+    private DateTime startDate = new DateTime(2024, 5, 27);
+    private DateTime endDate = new DateTime(2024, 6, 5);
+
+    private List<DateTime> dates;
+    private List<Reservation> reservations;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dates = new List<DateTime>();
+        for (var date = startDate; date <= endDate; date = date.AddDays(1))
+        {
+            dates.Add(date);
+        }
+        reservations = await ReservationService.GetReservationByDateAsync(startDate, endDate);
+        if (reservations == null)
+        {
+            reservations = new List<Reservation>();
+        }
+    }
+
+    private async void Edit(Reservation model)
+    {
+        NavigationManager.NavigateTo($"arrangepage/{model.Day}/{model.SlOt}/{model.BedId}");
+    }
+}
+
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .btn {
+        width: 100px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .btn-secondary-disabled {
+        background-color: #6c757d;
+        color: #fff;
+        border: 1px solid #6c757d;
+        pointer-events: none;
+    }
+
+    .btn-primary {
+        background-color: #C7C7E2;
+        color: #3C3C3C;
+        border: 1px solid #C7C7E2;
+    }
+
+        .btn-primary:hover {
+            background-color: #6c757d;
+        }
+
+    table th,
+    table td {
+        border: none;
+    }
+</style>

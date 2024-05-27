@@ -1,0 +1,166 @@
+﻿@page "/manage-product"
+@page "/manage-product/{Id:int}"
+@rendermode InteractiveAuto
+<!--attribute [RenderModeInteractiveAuto]-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">新增表單</div>
+                <div class="card-body">
+                    <EditForm Model="ProductModel" OnValidSubmit="HandleSave">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="form-group">
+                            <label class="form-label">姓名</label>
+                            <InputText @bind-Value="ProductModel.Name" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.Name"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">病歷號</label>
+                            <InputNumber @bind-Value="ProductModel.Number" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>ProductModel.Number"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">評估日期</label>
+                            <InputDate @bind-Value="ProductModel.AssessmentDate" class="form-control"></InputDate>
+                            <ValidationMessage For="()=>ProductModel.AssessmentDate"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">身高</label>
+                            <InputNumber @bind-Value="ProductModel.Height" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>ProductModel.Height"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">體重</label>
+                            <InputNumber @bind-Value="ProductModel.Weight" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>ProductModel.Weight"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">意識</label>
+                            <InputText @bind-Value="ProductModel.Consciousness" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.Consciousness"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">血壓</label>
+                            <InputNumber @bind-Value="ProductModel.BP" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>ProductModel.BP"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">心律</label>
+                            <InputNumber @bind-Value="ProductModel.HR" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>ProductModel.HR"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">呼吸次數</label>
+                            <InputNumber @bind-Value="ProductModel.RR" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>ProductModel.RR"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">體溫</label>
+                            <InputNumber @bind-Value="ProductModel.BT" class="form-control"></InputNumber>
+                            <ValidationMessage For="()=>ProductModel.BT"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">目前身體狀況</label>
+                            <InputText @bind-Value="ProductModel.PhysicalCondition" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.PhysicalCondition"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">出國狀況</label>
+                            <InputText @bind-Value="ProductModel.Abroad" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.Abroad"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">職業</label>
+                            <InputText @bind-Value="ProductModel.Occupation" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.Occupation"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">過敏史</label>
+                            <InputText @bind-Value="ProductModel.AllergyHistory" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.AllergyHistory"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">疾病史</label>
+                            <InputText @bind-Value="ProductModel.MedicalHistory" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.MedicalHistory"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">副作用</label>
+                            <InputText @bind-Value="ProductModel.SideEffects" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.SideEffects"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">操作人員</label>
+                            <InputText @bind-Value="ProductModel.Operator" class="form-control"></InputText>
+                            <ValidationMessage For="()=>ProductModel.Operator"></ValidationMessage>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">操作時間</label>
+                            <InputDate @bind-Value="ProductModel.OperationTime" class="form-control"></InputDate>
+                            <ValidationMessage For="()=>ProductModel.OperationTime"></ValidationMessage>
+                        </div>
+                        <br />
+                        <button type="submit" class="btn btn-primary"> 儲存</button>
+                    </EditForm>
+                </div>
+
+                <div class="card-footer">
+                    Id: @ReturnProduct.Id <br />
+                    姓名: @ReturnProduct.Name <br />
+                    病歷號: @ReturnProduct.Number<br />
+                    評估日期: @((ReturnProduct.AssessmentDate != null) ? ReturnProduct.AssessmentDate.Value.ToString("yyyy-MM-dd") : "") <br />
+                    身高: @ReturnProduct.Height<br />
+                    體重: @ReturnProduct.Weight<br />
+                    意識: @ReturnProduct.Consciousness <br />
+                    血壓: @ReturnProduct.BP<br />
+                    心律: @ReturnProduct.HR<br />
+                    呼吸次數: @ReturnProduct.RR<br />
+                    體溫: @ReturnProduct.BT<br />
+                    目前身體狀況: @ReturnProduct.PhysicalCondition<br />
+                    出國狀況: @ReturnProduct.Abroad<br />
+                    職業: @ReturnProduct.Occupation<br />
+                    過敏史: @ReturnProduct.AllergyHistory<br />
+                    疾病史: @ReturnProduct.MedicalHistory<br />
+                    副作用: @ReturnProduct.SideEffects<br />
+                    操作人員: @ReturnProduct.Operator<br />
+                    操作時間: @((ReturnProduct.OperationTime != null) ? ReturnProduct.OperationTime.Value.ToString("yyyy-MM-dd") + " " + DateTime.Now.ToString("HH:mm:ss") : "") <br />
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public Product ProductModel { get; set; } = new Product();
+
+    [Parameter] public int Id { get; set; }
+
+    private Product ReturnProduct = new Product();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id > 0)
+            ProductModel = await ProductService.GetProductByIdAsync(Id);
+        else
+            ProductModel.AssessmentDate = DateTime.Today; // Set default assessment date to today's date
+    }
+
+    private async Task HandleSave()
+    {
+        if (ProductModel.Id > 0)
+        {
+            ReturnProduct = await ProductService.UpdateProductAsync(ProductModel);
+            ProductModel = new Product();
+        }
+        else
+        {
+            ReturnProduct = await ProductService.AddProductAsync(ProductModel);
+            ProductModel = new Product();
+        }
+    }
+}
