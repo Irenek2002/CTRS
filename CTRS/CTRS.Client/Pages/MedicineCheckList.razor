@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card" style="width: 70rem;">
                 <div class="card">
-                    <div class="card-header"> <button class="btn btn-primary float-end" @onclick="NavigateToAddMedicinePage"> Add Medicine </button></div>
+                    <div class="card-header"> <button class="btn1 btn-primary float-end" @onclick="NavigateToAddMedicinePage"> Add Medicine </button></div>
                 </div>
                 @if (MedicineChecks.Count > 0)
                 {
@@ -18,6 +18,16 @@
                             <thead>
                                 <tr>
                                     <th>Id</th>
+                                    <th>藥物名稱</th>
+                                    <th>服法</th>
+                                    <th>服用劑量</th>
+                                    <th>服用劑量單位</th>
+                                    <th>已服用or未服用</th>
+                                    <th>症狀情況</th>
+                                    <th>操作人員</th>
+                                    <th>操作時間</th>
+                                    <!--
+                                    <th>Id</th>
                                     <th>病歷號</th>
                                     <th>藥物名稱</th>
                                     <th>服法</th>
@@ -27,6 +37,7 @@
                                     <th>症狀情況</th>
                                     <th>操作人員</th>
                                     <th>操作時間</th>
+                                    -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -97,3 +108,65 @@
         await LoadMedicineChecks();
     }
 }
+
+<style>
+    body {
+        background-color: #e2ddd7; /* 設置背景顏色 */
+    }
+
+    .btn1 {
+        width: 110px;
+        height: 35px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .btn2 {
+        width: 42px;
+        height: 22px;
+        font-size: 12px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #8d838c;
+        color: #fff;
+        border: 1px solid #8d838c;
+    }
+
+        .btn-primary:hover {
+            background-color: #8d838c;
+            border: 1px solid #8d838c;
+        }
+
+    .btn-info {
+        background-color: #D8BFD8;
+        color: #444444;
+        border: none; /* 保持原色 */
+        filter: drop-shadow(2px 2px 2px #000);
+    }
+
+        .btn-info:hover {
+            background-color: #D8BFD8;
+            color: #444444;
+            border: none; /* 保持原色 */
+            opacity: 0.8;
+        }
+
+    .btn-danger {
+        background-color: #C0C0C0;
+        border: none; /* 保持原色 */
+        filter: drop-shadow(2px 2px 2px #000);
+        color: #444444;
+    }
+
+        .btn-danger:hover {
+            background-color: #C0C0C0;
+            border: none; /* 保持原色 */
+            color: #444444;
+            opacity: 0.8;
+        }
+
+</style>

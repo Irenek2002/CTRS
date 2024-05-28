@@ -2,31 +2,13 @@
 
 @rendermode InteractiveAuto
 
-<style>
-    .table-scroll {
-        width: 100%;
-        overflow-x: auto;
-    }
-
-        .table-scroll th,
-        .table-scroll td {
-            white-space: normal; /* 允許文字折行 */
-            overflow: hidden; /* 超出部分隱藏 */
-            text-overflow: ellipsis; /* 顯示省略號 */
-        }
-
-        .table-scroll img {
-            max-width: 100px; /* 圖片最大寬度 */
-        }
-</style>
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card">
                     <div class="card-header">
-                        <button class="btn btn-primary float-end" @onclick="NavigateToAddHealthEduPage">新增衛教資訊</button>
+                        <button class="btn1 btn-primary float-end" @onclick="NavigateToAddHealthEduPage">新增衛教資訊</button>
                     </div>
                 </div>
                 @if (HealthEdus.Count > 0)
@@ -83,8 +65,8 @@
                                             </td>
 
                                             <td>
-                                                <button class="btn btn-info" @onclick="()=>Edit(healthEdu)">修改</button>
-                                                <button class="btn btn-danger" @onclick="() => Delete(healthEdu.Id)">刪除</button>
+                                                <button class="btn2 btn-info" @onclick="()=>Edit(healthEdu)">修改</button>
+                                                <button class="btn2 btn-danger" @onclick="() => Delete(healthEdu.Id)">刪除</button>
                                             </td>
                                         </tr>
                                     }
@@ -150,3 +132,76 @@
     }
 
 }
+
+    <style>
+    .btn1 {
+        width: 100px;
+        height: 35px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .btn2 {
+        width: 42px;
+        height: 22px;
+        font-size: 12px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #8d838c;
+        color: #fff;
+        border: 1px solid #8d838c;
+    }
+
+        .btn-primary:hover {
+            background-color: #8d838c;
+            border: 1px solid #8d838c;
+        }
+
+    .btn-info {
+        background-color: #D8BFD8;
+        color: #444444;
+        border: none; /* 保持原色 */
+        filter: drop-shadow(2px 2px 2px #000);
+    }
+
+        .btn-info:hover {
+            background-color: #D8BFD8;
+            color: #444444;
+            border: none; /* 保持原色 */
+            opacity: 0.8;
+        }
+
+    .btn-danger {
+        background-color: #C0C0C0;
+        border: none; /* 保持原色 */
+        filter: drop-shadow(2px 2px 2px #000);
+        color: #444444;
+    }
+
+        .btn-danger:hover {
+            background-color: #C0C0C0;
+            border: none; /* 保持原色 */
+            color: #444444;
+            opacity: 0.8;
+        }
+
+    .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+        .table-scroll th,
+        .table-scroll td {
+            white-space: normal; /* 允許文字折行 */
+            overflow: hidden; /* 超出部分隱藏 */
+            text-overflow: ellipsis; /* 顯示省略號 */
+        }
+
+        .table-scroll img {
+            max-width: 100px; /* 圖片最大寬度 */
+        }
+    </style>

@@ -6,10 +6,10 @@
 <div class="container">
     <h1>選擇資訊類別</h1>
     <div class="btn-group" role="group" aria-label="Basic example">
-        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.飲食指引)">飲食指引</button> &nbsp;&nbsp;
-        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.衛教資訊)">衛教資訊</button> &nbsp;&nbsp;
-        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.社會福利)">社會福利</button> &nbsp;&nbsp;
-        <button class="btn btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.檢查報告)">檢查報告</button>
+        <button class="btn1 btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.飲食指引)">飲食指引</button> &nbsp;&nbsp;
+        <button class="btn1 btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.衛教資訊)">衛教資訊</button> &nbsp;&nbsp;
+        <button class="btn1 btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.社會福利)">社會福利</button> &nbsp;&nbsp;
+        <button class="btn1 btn-primary float-end" @onclick="() => RedirectToCategory(HealthCategory.檢查報告)">檢查報告</button>
     </div>
 </div>
 
@@ -265,3 +265,61 @@
         檢查報告
     }
 }
+
+<style>
+    .btn1 {
+        width: 100px;
+        height: 35px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .btn2 {
+        width: 42px;
+        height: 22px;
+        font-size: 12px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #8d838c;
+        color: #fff;
+        border: 1px solid #8d838c;
+    }
+
+        .btn-primary:hover {
+            background-color: #8d838c;
+            border: 1px solid #8d838c;
+        }
+
+    .btn-info {
+        background-color: #D8BFD8;
+        color: #444444;
+        border: none; /* 保持原色 */
+        filter: drop-shadow(2px 2px 2px #000);
+    }
+
+        .btn-info:hover {
+            background-color: #D8BFD8;
+            color: #444444;
+            border: none; /* 保持原色 */
+            opacity: 0.8;
+        }
+
+    .btn-danger {
+        background-color: #C0C0C0;
+        border: none; /* 保持原色 */
+        filter: drop-shadow(2px 2px 2px #000);
+        color: #444444;
+    }
+
+        .btn-danger:hover {
+            background-color: #C0C0C0;
+            border: none; /* 保持原色 */
+            color: #444444;
+            opacity: 0.8;
+        }
+
+</style>

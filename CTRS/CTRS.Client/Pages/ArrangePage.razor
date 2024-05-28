@@ -111,9 +111,11 @@
     protected override async Task OnParametersSetAsync()
     {
         if (Id > 0)
-        {
             ReservationModel = await ReservationService.GetReservationByIdAsync(Id);
-        }
+        else
+            ReservationModel.Day = DateTime.Today;
+            ReservationModel.OperatingTime = DateTime.Today;
+
     }
     private void NavigateToListPage()
     {
@@ -122,6 +124,9 @@
 }
 
 <style>
+    body {
+        background-color: #e2ddd7; /* 設置背景顏色 */
+    }
     .card-header {
         background-color: #bbafaf;
         color: #fff;

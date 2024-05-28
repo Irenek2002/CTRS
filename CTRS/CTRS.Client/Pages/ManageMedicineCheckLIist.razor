@@ -11,42 +11,42 @@
                         <DataAnnotationsValidator />
                         <ValidationSummary />
                         <div class="form-group">
-                            <label class="form-label">Medicine Name</label>
+                            <label class="form-label">藥物名稱</label>
                             <InputText @bind-Value="MedicineCheckModel.MedicineName" class="form-control"></InputText>
                             <ValidationMessage For="()=>MedicineCheckModel.MedicineName"></ValidationMessage>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Instruction</label>
+                            <label class="form-label">服法</label>
                             <InputText @bind-Value="MedicineCheckModel.Instruction" class="form-control"></InputText>
                             <ValidationMessage For="()=>MedicineCheckModel.Instruction"></ValidationMessage>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Each Dosage</label>
+                            <label class="form-label">服用劑量</label>
                             <InputNumber @bind-Value="MedicineCheckModel.EachDosage" class="form-control"></InputNumber>
                             <ValidationMessage For="()=>MedicineCheckModel.EachDosage"></ValidationMessage>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Unit of Each Dosage</label>
+                            <label class="form-label">服用劑量單位</label>
                             <InputText @bind-Value="MedicineCheckModel.UnitOfEachDosage" class="form-control"></InputText>
                             <ValidationMessage For="()=>MedicineCheckModel.UnitOfEachDosage"></ValidationMessage>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Did or Didn't Take Medicine</label>
+                            <label class="form-label">已服用or未服用</label>
                             <InputCheckbox @bind-Value="MedicineCheckModel.DidOrDidntTakeMedicine"></InputCheckbox>
                             <ValidationMessage For="()=>MedicineCheckModel.DidOrDidntTakeMedicine"></ValidationMessage>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Symptom Description</label>
+                            <label class="form-label">症狀情況</label>
                             <InputText @bind-Value="MedicineCheckModel.SymptomDescription" class="form-control"></InputText>
                             <ValidationMessage For="()=>MedicineCheckModel.SymptomDescription"></ValidationMessage>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Operator</label>
+                            <label class="form-label">操作人員</label>
                             <InputText @bind-Value="MedicineCheckModel.Operator" class="form-control"></InputText>
                             <ValidationMessage For="()=>MedicineCheckModel.Operator"></ValidationMessage>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Operation Time</label>
+                            <label class="form-label">操作時間</label>
                             <InputDate @bind-Value="MedicineCheckModel.OperationTime" class="form-control"></InputDate>
                             <ValidationMessage For="()=>MedicineCheckModel.OperationTime"></ValidationMessage>
                         </div>
@@ -113,3 +113,42 @@
             MedicineCheckModel = await MedicineCheckService.GetMedicineCheckByIdAsync(Id);
     }
 }
+
+
+<style>
+    body {
+        background-color: #e2ddd7; /* 設置背景顏色 */
+    }
+
+    .card-header {
+        background-color: #bbafaf;
+        color: #fff;
+    }
+
+    .card-body {
+    }
+
+    .btn {
+        width: 80px;
+        height: 35px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #bbafaf;
+        color: #fff;
+        border: 1px solid #bbafaf;
+    }
+
+        .btn-primary:hover {
+            background-color: #8d838c;
+            border: 1px solid #8d838c;
+        }
+
+    .button-container {
+        display: flex;
+        justify-content: center; /* 水平置中 */
+        gap: 30px; /* 按鈕間距 */
+    }
+</style>
