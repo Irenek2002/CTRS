@@ -10,7 +10,7 @@ namespace Arrangementdata.Controllers
     public class ReservationController : ControllerBase
     {
         private readonly IReservationRepository reservationRepository;
-        public ReservationController(IReservationRepository reservationrepository)
+        public ReservationController(IReservationRepository reservationRepository)
         {
             this.reservationRepository = reservationRepository;
         }

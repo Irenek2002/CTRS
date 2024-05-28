@@ -242,7 +242,7 @@
                     MedicalHistory: @ReturnPatient.MedicalHistory
                     MedicationInstructions: @ReturnPatient.MedicationInstructions <br />
                     Operator:@ReturnPatient.Operator <br />
-                    OperationTime: @ReturnPatient.OperationTime<br />
+                    OperationTime: @((ReturnPatient.OperationTime != null) ? ReturnPatient.OperationTime.ToString("yyyy-MM-dd") + " " + DateTime.Now.ToString("HH:mm:ss") : "")
                 </div>
             </div>
         </div>
@@ -277,10 +277,9 @@
     protected override async Task OnParametersSetAsync()
     {
         if (Id > 0)
-        {
             PatientModel = await PatientService.GetPatientByIdAsync(Id);
-
-        }
+        else
+            PatientModel.OperationTime = DateTime.Today;
     }
 
 }

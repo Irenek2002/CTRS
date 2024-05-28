@@ -14,9 +14,9 @@ namespace CTRS.Implementations
         }
         public async Task<MedicineCheck> AddMedicineCheckAsync(MedicineCheck model)
         {
-            if (model is null) return null!;
-            var chk = await appDbContext.MedicineChecks.Where(_ => _.MedicineName.ToLower().Equals(model.MedicineName.ToLower())).FirstOrDefaultAsync();
-            if (chk is not null) return null!;
+            //if (model is null) return null!;
+           // var chk = await appDbContext.MedicineChecks.Where(_ => _.MedicineName.ToLower().Equals(model.MedicineName.ToLower())).FirstOrDefaultAsync();
+            //if (chk is not null) return null!;
 
             var newDataAdded = appDbContext.MedicineChecks.Add(model).Entity;
             await appDbContext.SaveChangesAsync();
@@ -31,13 +31,7 @@ namespace CTRS.Implementations
             await appDbContext.SaveChangesAsync();
             return medicineCheck;
         }
-
-        public Task<List<MedicineCheck>> GetAllMedicineCheckAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<List<MedicineCheck>> GetAllMedicineChecksAsync() => await appDbContext.MedicineChecks.ToListAsync();
+        public async Task<List<MedicineCheck>> GetAllMedicineCheckAsync() => await appDbContext.MedicineChecks.ToListAsync();
 
         public async Task<MedicineCheck> GetMedicineCheckByIdAsync(int medicineCheckId)
         {

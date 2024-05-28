@@ -30,22 +30,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var medicinecheck in MedicineChecks)
+                                @foreach (var medicineCheck in MedicineChecks)
                                 {
                                     <tr>
-                                        <td>@medicinecheck.Id</td>
-                                        <td>@medicinecheck.MedicineName</td>
-                                        <td>@medicinecheck.Instruction</td>
-                                        <td>@medicinecheck.EachDosage</td>
-                                        <td>@medicinecheck.UnitOfEachDosage</td>
-                                        <td>@medicinecheck.DidOrDidntTakeMedicine</td>
-                                        <td>@medicinecheck.SymptomDescription</td>
-                                        <td>@medicinecheck.Operator</td>
-                                        <td>@medicinecheck.OperationTime</td>
+                                        <td>@medicineCheck.Id</td>
+                                        <td>@medicineCheck.MedicineName</td>
+                                        <td>@medicineCheck.Instruction</td>
+                                        <td>@medicineCheck.EachDosage</td>
+                                        <td>@medicineCheck.UnitOfEachDosage</td>
+                                        <td>@medicineCheck.DidOrDidntTakeMedicine</td>
+                                        <td>@medicineCheck.SymptomDescription</td>
+                                        <td>@medicineCheck.Operator</td>
+                                        <td>@medicineCheck.OperationTime</td>
                                         <td>
                                             <div class="hstack gap-2">
-                                                <button class="btn  btn-info" @onclick="()=>Edit(medicinecheck)"> Edit</button>
-                                                <button class="btn  btn-danger" @onclick="() => Delete(medicinecheck.Id)"> Delete</button>
+                                                <button class="btn  btn-info" @onclick="()=>Edit(medicineCheck)"> Edit</button>
+                                                <button class="btn  btn-danger" @onclick="() => Delete(medicineCheck.Id)"> Delete</button>
 
                                             </div>
                                         </td>
@@ -67,18 +67,18 @@
 @code {
     private List<MedicineCheck> MedicineChecks { get; set; } = new();
 
-    private async Task LoadMedicine()
+    private async Task LoadMedicineChecks()
     {
-        var medicinechecks = await MedicineCheckService.GetAllMedicineCheckAsync();
+        var medicineChecks = await MedicineCheckService.GetAllMedicineCheckAsync();
         MedicineChecks?.Clear();
         if (MedicineChecks is null) return;
-        foreach (var medicinecheck in medicinechecks)
-            MedicineChecks.Add(medicinecheck);
+        foreach (var medicineCheck in medicineChecks)
+            MedicineChecks.Add(medicineCheck);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadMedicine();
+        await LoadMedicineChecks();
     }
 
     private void NavigateToAddMedicinePage()
@@ -91,9 +91,9 @@
         NavigationManager.NavigateTo($"manage-medicine-check-list/{model.Id}");
     }
 
-    private async Task Delete(int no)
+    private async Task Delete(int id)
     {
-        var medicinecheck = await MedicineCheckService.DeleteMedicineCheckAsync(no);
-        await LoadMedicine();
+        var medicineCheck = await MedicineCheckService.DeleteMedicineCheckAsync(id);
+        await LoadMedicineChecks();
     }
 }
