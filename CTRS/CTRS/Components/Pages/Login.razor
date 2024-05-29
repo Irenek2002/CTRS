@@ -1,0 +1,219 @@
+﻿@page "/login"
+@inherits LayoutComponentBase
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager Navigation
+
+<PageTitle>DemoBlazorCRUD</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+    <main>
+        <div class="top-row px-4">
+            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank"></a>
+        </div>
+        <article>
+            <div class="text-center">
+@*                 <h1 class="special-font mt-4">化療病床預約系統</h1>
+ *@            </div>
+            @if (!IsAuthenticated)
+            {
+                <div class="login-wrapper">
+                    <div class="login-container">
+                        <div class="logo">
+                            <img src="https://upload.wikimedia.org/wikipedia/zh/2/21/Mackay_Memorial_Hospital_Logo.png" alt="Logo" />
+                        </div>
+
+                        <div class="identity-selection">
+                            <label>
+                                <input type="radio" name="identity" value="medical" @onchange="SelectIdentity" checked="@IsMedicalChecked" /> 醫療人員
+                            </label>
+                            <label>
+                                <input type="radio" name="identity" value="patient" @onchange="SelectIdentity" checked="@IsPatientChecked" /> 病人
+                            </label>
+                        </div>
+
+                        <EditForm Model="loginModel" OnValidSubmit="HandleValidSubmit">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="form-group">
+                                <label for="username">帳號</label>
+                                <InputText id="username" class="form-control" @bind-Value="loginModel.Username" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">密碼</label>
+                                <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" />
+                            </div>
+
+                            <button type="submit" class="btn1 btn-primary">登入</button>
+                        </EditForm>
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Body
+            }
+        </article>
+    </main>
+</div>
+
+@code {
+    private bool IsAuthenticated = false;
+    private string SelectedIdentity = "medical"; // 預設選擇醫療人員
+    private LoginModel loginModel = new LoginModel();
+
+    private bool IsMedicalChecked => SelectedIdentity == "medical";
+    private bool IsPatientChecked => SelectedIdentity == "patient";
+
+    private void SelectIdentity(ChangeEventArgs e)
+    {
+        SelectedIdentity = e.Value.ToString();
+        Console.WriteLine($"Selected Identity: {SelectedIdentity}");
+        loginModel = new LoginModel();
+        StateHasChanged(); // 强制刷新
+    }
+
+    public void HandleValidSubmit()
+    {
+        Console.WriteLine($"登錄: 帳號: {loginModel.Username}, 密碼: {loginModel.Password}");
+
+        if (SelectedIdentity == "medical")
+        {
+            SetUserRole("medical");
+            Navigation.NavigateTo("/medical-dashboard");
+        }
+        else if (SelectedIdentity == "patient")
+        {
+            SetUserRole("patient");
+            Navigation.NavigateTo("/patient-dashboard");
+        }
+
+        IsAuthenticated = true;
+    }
+
+    public void SetUserRole(string role)
+    {
+        // Set user role logic here
+        StateHasChanged();
+    }
+
+    public class LoginModel
+    {
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+    }
+}
+
+<style>
+    body {
+        background-color: #e2ddd7; /* 設置背景顏色 */
+    }
+
+    .page {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        height: 100vh;
+    }
+
+    .sidebar {
+        width: 250px; /* 假设侧边栏宽度为250px */
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: -125px; /* 将main向左移动半个sidebar的宽度 */
+    }
+
+    .top-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+    }
+
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 600px;
+        height: calc(100vh - 50px); /* Adjust the height to center within main */
+    }
+
+    .login-container {
+        background-color: white; /* 設置表單背景為白色 */
+        max-width: 400px;
+        padding: 2rem;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .logo img {
+        max-width: 50%;
+        height: auto;
+        margin-bottom: 1rem;
+    }
+
+    .identity-selection {
+        margin-bottom: 1rem;
+    }
+
+        .identity-selection label {
+            margin: 0 1rem;
+        }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .btn1 {
+        width: 110px;
+        height: 35px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 4px;
+    }
+
+    .btn2 {
+        width: 42px;
+        height: 22px;
+        font-size: 12px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: #8d838c;
+        color: #fff;
+        border: 1px solid #8d838c;
+    }
+
+        .btn-primary:hover {
+            background-color: #8d838c;
+            border: 1px solid #8d838c;
+        }
+
+    .special-font {
+        font-family: 'Blippo', fantasy;
+        font-size: 70px;
+        color: #5b4e55;
+        /* 如果字體名稱帶有空格，請用單引號括起來 */
+        font-weight: bold;
+    }
+
+    .login-wrapper {
+        position: relative;
+        margin-top: -100px;
+        margin-left: -100px;
+    }
+</style>

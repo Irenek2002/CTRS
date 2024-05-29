@@ -11,7 +11,7 @@
                 @if (Patients.Count > 0)
                 {
                     <div class="card-header">
-                        Patient List
+                        個案管理檔
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
@@ -41,7 +41,7 @@
                                         <td>@patient.Name</td>
                                         <td>@patient.Gender</td>
                                         <td>@patient.Diagnosis</td>
-                                        <td><button class="btn btn-link" @onclick="() => ViewPatientMedicationDetails(patient)">@patient.MedicationInstructions</button></td>
+                                        <td>@patient.MedicationInstructions</td>
                                         <td>@patient.ExpectedTreatmentTime</td>
                                         <td>@patient.Physician</td>
                                         <td>@patient.RecentWeight</td>
@@ -50,10 +50,10 @@
                                         <td>@patient.OperationTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
                                         <td>
                                             <div class="hstack gap-2">
-                                                <button class="btn  btn-info" @onclick="()=>Edit(patient)"> Edit</button>
-                                                <button class="btn  btn-danger" @onclick="() => Delete(patient.Id)"> Delete</button>
-                                                <button class="btn btn-primary" @onclick="() => AddAppointment(patient)"> 新增預約</button>
-                                                <button class="btn btn-secondary" @onclick="() => FillMedication(patient)"> 藥物填寫</button>
+                                                <button class="btn  btn-info" @onclick="()=>Edit(patient)"> 編輯</button>
+                                                <button class="btn  btn-danger" @onclick="() => Delete(patient.Id)"> 刪除</button>
+                                                <button class="btn  btn-info" @onclick="() => AddAppointment(patient)"> 新增預約</button>
+                                                <button class="btn  btn-danger" @onclick="() => FillMedication(patient)"> 藥物填寫</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -118,7 +118,7 @@
     private void FillMedication(Patient patient)
     {
         // Navigate to fill medication page or show fill medication modal
-        NavigationManager.NavigateTo($"fill-medication/{patient.Id}");
+        NavigationManager.NavigateTo($"MedicineCheckList/{patient.Id}");
     }
 }
 
@@ -128,7 +128,7 @@
     }
 
     .btn1 {
-        width: 90px;
+        width: 150px;
         height: 35px;
         font-size: 14px;
         font-weight: bold;
@@ -136,8 +136,8 @@
     }
 
     .btn2 {
-        width: 42px;
-        height: 22px;
+        width: 38px;
+        height: 18px;
         font-size: 12px;
         font-weight: bold;
         border: none;

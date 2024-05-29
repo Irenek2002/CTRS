@@ -258,7 +258,7 @@
     private Patient ReturnPatient = new();
     private async Task HandleSave()
     {
-
+        PatientModel.ExpectedTreatmentTime = PatientModel.ExpectedTreatmentTime;
         if (PatientModel.Id > 0)
         {
             ReturnPatient = await PatientService.UpdatePatientAsync(PatientModel);

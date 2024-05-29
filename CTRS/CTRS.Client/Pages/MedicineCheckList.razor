@@ -11,7 +11,7 @@
                 @if (MedicineChecks.Count > 0)
                 {
                     <div class="card-header">
-                        Medicine List
+                        用藥清單
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
@@ -55,8 +55,8 @@
                                         <td>@medicineCheck.OperationTime</td>
                                         <td>
                                             <div class="hstack gap-2">
-                                                <button class="btn  btn-info" @onclick="()=>Edit(medicineCheck)"> Edit</button>
-                                                <button class="btn  btn-danger" @onclick="() => Delete(medicineCheck.Id)"> Delete</button>
+                                                <button class="btn  btn-info" @onclick="()=>Edit(medicineCheck)"> 編輯</button>
+                                                <button class="btn  btn-danger" @onclick="() => Delete(medicineCheck.Id)"> 刪除</button>
 
                                             </div>
                                         </td>
