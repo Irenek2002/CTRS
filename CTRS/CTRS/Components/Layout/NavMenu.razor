@@ -1,6 +1,9 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">化療病床預約系統</a>
+        <a class="navbar-brand" href="">
+            <img src="https://upload.wikimedia.org/wikipedia/zh/2/21/Mackay_Memorial_Hospital_Logo.png" alt="Logo" class="logo-img" />
+            化療病床預約系統
+        </a>
     </div>
 </div>
 <!--
@@ -8,13 +11,34 @@
     <p style="margin: 0;">&nbsp;</p>    <p>您好，請先登入系統</p>
     <p>病人請輸入病歷號登入</p>
     <p>醫療人員請輸入員工編號登入</p>
-
 </div>-->
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <!--
     <div class="nav-item px-3">
+        <NavLink class="nav-link" href="patient-home" Match="NavLinkMatch.All">
+            <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> 首頁
+        </NavLink>
+    </div>
+    <div class="nav-item px-3">
+        <NavLink class="nav-link" href="patient-list">
+            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 個案管理檔
+        </NavLink>
+    </div>
+    <div class="nav-item px-3">
+        <NavLink class="nav-link" href="reservationlist">
+            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 預約清單
+        </NavLink>
+    </div>
+    <div class="nav-item px-3">
+        <NavLink class="nav-link" href="healthEdu-list">
+            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 管理衛教相關連結
+        </NavLink>
+    </div>-->
+
+ <div class="nav-item px-3">
         <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
             <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> 首頁
         </NavLink>
@@ -26,13 +50,16 @@
     </div>
     <div class="nav-item px-3">
         <NavLink class="nav-link" href="product-list">
-            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 病人評估表
+            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 自我評估表及用藥紀錄
         </NavLink>
     </div><div class="nav-item px-3">
-        <NavLink class="nav-link" href="reservationlist">
+        <NavLink class="nav-link" href="view">
             <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 查看預約
         </NavLink>
     </div>
+
+
+
 
     <!--<nav class="flex-column">
         醫護登入後首頁
@@ -45,11 +72,6 @@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="patient-home" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> 首頁
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -97,3 +119,10 @@
 </div>
 
 
+<style>
+    .logo-img {
+        width: 30px; /* 调整宽度以确保图像很小 */
+        height: auto; /* 保持宽高比 */
+        margin-right: 10px; /* 调整图像与文字之间的间距 */
+    }
+</style>

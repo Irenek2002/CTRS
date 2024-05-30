@@ -1,0 +1,228 @@
+﻿@page "/view"
+@rendermode InteractiveAuto
+@using System.Globalization
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center welcome-message">
+            李大先生您好，您的預約在 <span class="highlight">6/2上午</span>，請攜帶相關證件準時報到，如有疑問請洽醫護人員謝謝您。
+        </div>
+        <div class="col-md-3 calendar-column mx-auto">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button class="nav-button" @onclick="PreviousMonth"> &lt; </button>
+                    <h3>@currentDate.ToString("yyyy/MM", CultureInfo.InvariantCulture)</h3>
+                    <button class="nav-button" @onclick="NextMonth"> &gt; </button>
+                </div>
+                <div class="calendar-body">
+                    @foreach (var dayOfWeek in daysOfWeek)
+                    {
+                        <div class="calendar-day-header">@dayOfWeek</div>
+                    }
+                    @foreach (var day in GetCalendarDays())
+                    {
+                        <div class="calendar-day @GetDayClass(day)" @onclick="() => SelectDay(day)">
+                            @day.Day
+                        </div>
+                    }
+                </div>
+                <div class="calendar-footer">
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="full"></span>
+                            <div class="text">當日已額滿</div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="full2"></span>
+                            <div class="text">您的化療時間</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private DateTime currentDate = new DateTime(2024, 5, 1); // 初始顯示5月
+    private DateTime selectedDate = DateTime.Now;
+    private readonly string[] daysOfWeek = { "Sun.", "Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat." };
+
+    private void PreviousMonth()
+    {
+        Console.WriteLine("PreviousMonth clicked");
+        currentDate = currentDate.AddMonths(-1);
+        StateHasChanged();
+    }
+
+    private void NextMonth()
+    {
+        Console.WriteLine("NextMonth clicked");
+        currentDate = currentDate.AddMonths(1);
+        StateHasChanged();
+    }
+
+    private void SelectDay(DateTime day)
+    {
+        selectedDate = day;
+        StateHasChanged(); // 確保組件重新渲染
+    }
+
+    private IEnumerable<DateTime> GetCalendarDays()
+    {
+        var firstDayOfMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
+        var firstDayOfCalendar = firstDayOfMonth.AddDays(-(int)firstDayOfMonth.DayOfWeek);
+        for (int i = 0; i < 42; i++)
+        {
+            yield return firstDayOfCalendar.AddDays(i);
+        }
+    }
+
+    private string GetDayClass(DateTime day)
+    {
+        if (day.Date == DateTime.Now.Date)
+        {
+            return "today";
+        }
+        if (day.Date == selectedDate.Date)
+        {
+            return "selected";
+        }
+        if (day.Date == new DateTime(2024, 6, 2).Date) // 6月2日的预约日期
+        {
+            return "appointment";
+        }
+        if (day.Date == new DateTime(2024, 5, 29).Date || day.Date == new DateTime(2024, 5, 31).Date || day.Date == new DateTime(2024, 5, 20).Date || day.Date == new DateTime(2024, 5, 11).Date || day.Date == new DateTime(2024, 5, 19).Date)
+        {
+            return "full";
+        }
+        return string.Empty;
+    }
+}
+
+<style>
+    body {
+        background-color: #e2ddd7; /* 設置背景顏色 */
+    }
+
+    .welcome-message {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .highlight {
+        background-color: #ffe3ab;
+    }
+
+    .calendar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        font-family: 'monospace';
+        font-size: 14px; /* 縮小字體大小 */
+    }
+
+    .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 400px; /* 調整寬度 */
+        height: 50px;
+    }
+
+        .calendar-header h3 {
+            margin: 0;
+        }
+
+        .calendar-header .nav-button {
+            background: none;
+            border: none;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+    .calendar-body {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        width: 400px; /* 調整寬度 */
+    }
+
+    .calendar-day-header,
+    .calendar-day {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60px; /* 增加高度 */
+        cursor: pointer;
+        border: 1px solid #e2ddd7;
+        border-radius: 4px;
+        background-color: white;
+    }
+
+        .calendar-day.today {
+            font-weight: bold;
+            background-color: white;
+        }
+
+        .calendar-day.selected {
+            background-color: #90caf9;
+        }
+
+        .calendar-day.full {
+            background-color: #bbafaf;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.appointment {
+            background-color: #ffe3ab; /* 高亮显示预约日期 */
+        }
+
+    .calendar-footer {
+        margin-top: 25px;
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+    }
+
+    .legend {
+        display: flex;
+        justify-content: space-around;
+        width: 380px; /* 调整宽度 */
+        margin-top: 10px;
+    }
+
+    .legend-item {
+        display: flex;
+        width: 100px;
+    }
+
+        .legend-item span {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            border-radius: 4px;
+        }
+
+    .today {
+        background-color: #e2ddd7;
+    }
+
+    .selected {
+        background-color: #FFC0CB;
+    }
+
+    .full {
+        background-color: #bbafaf;
+    }
+
+    .full2 {
+        background-color: #ffe3ab;
+    }
+
+    .text {
+        width: 100px;
+    }
+</style>

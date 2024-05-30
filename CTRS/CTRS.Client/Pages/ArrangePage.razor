@@ -111,9 +111,11 @@
     protected override async Task OnParametersSetAsync()
     {
         if (Id > 0)
-        {
             ReservationModel = await ReservationService.GetReservationByIdAsync(Id);
-        }
+        else
+            ReservationModel.Day = DateTime.Today; // Set default assessment date to today's date
+
+        ReservationModel.OperatingTime = DateTime.Today; // Set default assessment date to today's date
     }
     private void NavigateToListPage()
     {

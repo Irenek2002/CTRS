@@ -6,12 +6,15 @@
         <div class="col-md-8">
             <div class="card" style="width: 70rem;">
                 <div class="card">
-                    <div class="card-header"> <button class="btn1 btn-primary float-end" @onclick="NavigateToAddMedicinePage"> Add Medicine </button></div>
+                    <div class="card-header d-flex justify-content-between">
+                        <button class="btn1 btn-secondary" @onclick="NavigateToAddproductlistPage"> 查看李大先生用藥情形及自身評估狀況 </button>
+                        <button class="btn1 btn-primary float-end" @onclick="NavigateToAddMedicinePage"> 新增藥品 </button>
+                    </div>
                 </div>
                 @if (MedicineChecks.Count > 0)
                 {
                     <div class="card-header">
-                        用藥清單
+                        請為李大先生指派用藥
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
@@ -22,7 +25,7 @@
                                     <th>服法</th>
                                     <th>服用劑量</th>
                                     <th>服用劑量單位</th>
-                                    <th>已服用or未服用</th>
+                                    <th>病人是否需要服用</th>
                                     <th>症狀情況</th>
                                     <th>操作人員</th>
                                     <th>操作時間</th>
@@ -97,6 +100,11 @@
         NavigationManager.NavigateTo("manage-medicine-check-list");
     }
 
+    private void NavigateToAddproductlistPage()
+    {
+        NavigationManager.NavigateTo("product-list");
+    }
+
     private void Edit(MedicineCheck model)
     {
         NavigationManager.NavigateTo($"manage-medicine-check-list/{model.Id}");
@@ -115,11 +123,14 @@
     }
 
     .btn1 {
-        width: 110px;
+        width: auto; /* 自动适应内容 */
+        min-width: 110px; /* 最小宽度 */
         height: 35px;
         font-size: 14px;
         font-weight: bold;
         border-radius: 4px;
+        margin: 0 5px; /* 确保按钮之间有间距 */
+        padding: 5px 10px; /* 增加内边距 */
     }
 
     .btn2 {
